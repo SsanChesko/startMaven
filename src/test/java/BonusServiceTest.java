@@ -1,4 +1,6 @@
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -69,7 +71,7 @@ public class BonusServiceTest {
     }
 
     @Test
-    void shouldCalculateForUnregisteredAndOverLimit () {
+    void shouldCalculateForUnregisteredAndOverLimit() {
         BonusService service = new BonusService();
 
         long amount = 10_000_111;
@@ -82,7 +84,7 @@ public class BonusServiceTest {
     }
 
     @Test
-    void shouldCalculateForUnregisteredAndUnderLimit (){
+    void shouldCalculateForUnregisteredAndUnderLimit() {
         BonusService service = new BonusService();
 
         long amount = 100_000;
@@ -95,7 +97,7 @@ public class BonusServiceTest {
     }
 
     @Test
-    void shouldCalculateForUnregisteredAndAmountUnder10000 (){
+    void shouldCalculateForUnregisteredAndAmountUnder10000() {
         BonusService service = new BonusService();
 
         long amount = 9999;
@@ -104,11 +106,11 @@ public class BonusServiceTest {
 
         long actual = service.calculate(amount, registered);
 
-        assertEquals(expected,actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    void shouldCalculateForRegisteredAndAmountUnder3334 (){
+    void shouldCalculateForRegisteredAndAmountUnder3334() {
         BonusService service = new BonusService();
 
         long amount = 3333;
@@ -117,6 +119,15 @@ public class BonusServiceTest {
 
         long actual = service.calculate(amount, registered);
 
-        assertEquals(expected,actual);
+        assertEquals(expected, actual);
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/data.csv")
+    void shouldCalculateForRegisteredAndUnderLimit1(int amount, boolean registered, int expected) {
+        BonusService service = new BonusService();
+        long actual = service.calculate(amount, registered);
+        assertEquals(expected, actual);
+
     }
 }
